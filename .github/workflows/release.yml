@@ -1,5 +1,8 @@
 name: Build & Release x86 Docker Image
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: ["main"]
