@@ -1,0 +1,38 @@
+name: Build x86 Docker Image
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build image (linux/amd64)
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: chatbox-amd64:latest
+
+      - name: Export image to tar
+        run: |
+          docker save chatbox-amd64:latest -o chatbox-amd64.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: chatbox-amd64
+          path: chatbox-amd64.tar
