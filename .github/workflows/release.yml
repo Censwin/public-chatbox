@@ -1,0 +1,41 @@
+name: Build & Release x86 Docker Image
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (AMD64)
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            -t chatbox-amd64 \
+            --output type=docker,dest=chatbox-amd64.tar .
+
+      - name: Get current date
+        id: date
+        run: echo "DATE=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ steps.date.outputs.DATE }}
+          name: "Chatbox Build ${{ steps.date.outputs.DATE }}"
+          draft: false
+          prerelease: false
+          files: chatbox-amd64.tar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
