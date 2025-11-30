@@ -3,36 +3,31 @@ name: Build x86 Docker Image
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
-      - name: Set up Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build image (linux/amd64)
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          platforms: linux/amd64
-          load: true
-          tags: chatbox-amd64:latest
-
-      - name: Export image to tar
+      - name: Build Docker image (AMD64)
         run: |
-          docker save chatbox-amd64:latest -o chatbox-amd64.tar
+          docker buildx build \
+            --platform linux/amd64 \
+            -t chatbox-amd64 \
+            --output type=docker,dest=chatbox-amd64.tar .
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload artifact (Docker image tar)
+        uses: actions/upload-artifact@v4
         with:
           name: chatbox-amd64
           path: chatbox-amd64.tar
+          retention-days: 7
