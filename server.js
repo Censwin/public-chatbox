@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 const path = require("path");
 const fs = require("fs");
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 80;
+const PORT = 80;
 
 const SAVE_DIR = "/docker/chat";
 if (!fs.existsSync(SAVE_DIR)) fs.mkdirSync(SAVE_DIR, { recursive: true });

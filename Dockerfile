@@ -8,7 +8,7 @@ RUN npm install --production
 COPY server.js ./
 COPY public ./public
 
-EXPOSE 8080
-ENV PORT=8080
+EXPOSE 80
+ENV PORT=80
 
 CMD ["node", "server.js"]

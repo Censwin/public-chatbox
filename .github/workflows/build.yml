@@ -24,6 +24,7 @@ jobs:
       - name: Build Docker image (AMD64)
         run: |
           docker buildx build \
+            --no-cache \
             --platform linux/amd64 \
             -t chatbox-amd64 \
             --output type=docker,dest=chatbox-amd64.tar .
