@@ -3,9 +3,6 @@ const textEl = document.getElementById("text");
 const messagesEl = document.getElementById("messages");
 const sendBtn = document.getElementById("send");
 
-const proto = location.protocol === "https:" ? "wss:" : "ws:";
-const ws = new WebSocket(proto + "//" + location.host);
-
 function append(msg) {
   const div = document.createElement("div");
   div.className = "msg";
@@ -16,34 +13,33 @@ function append(msg) {
   messagesEl.appendChild(div);
 }
 
-ws.onmessage = (ev) => {
-  try {
-    const obj = JSON.parse(ev.data);
-    if (obj.type === "history") {
-      messagesEl.innerHTML = "";
-      obj.data.forEach(append);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    } else if (obj.type === "message") {
-      append(obj.data);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-  } catch {}
-};
+async function loadMessages() {
+  const res = await fetch("/messages");
+  const list = await res.json();
 
-function send() {
+  messagesEl.innerHTML = "";
+  list.forEach(append);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+async function send() {
   const text = textEl.value.trim();
   if (!text) return;
 
-  ws.send(
-    JSON.stringify({
-      type: "message",
+  await fetch("/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
       nick: nickEl.value || "匿名",
       text,
-    })
-  );
+    }),
+  });
 
   textEl.value = "";
   textEl.focus();
+
+  // 提醒用户手动刷新
+  alert("消息已发送！如需查看最新消息请刷新页面。");
 }
 
 sendBtn.onclick = send;
@@ -54,3 +50,6 @@ textEl.onkeydown = (e) => {
     send();
   }
 };
+
+// 页面加载时读取一次消息
+loadMessages();
