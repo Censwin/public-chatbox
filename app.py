@@ -4,7 +4,15 @@ from datetime import datetime, timedelta
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+import os
 
+os.makedirs("/docker/chat", exist_ok=True)
+msg_file = "/docker/chat/messages.json"
+
+if not os.path.exists(msg_file):
+    with open(msg_file, "w") as f:
+        f.write("[]")
+        
 app = FastAPI()
 
 PORT = 80

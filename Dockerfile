@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY public ./public
 
-RUN mkdir -p /docker/chat && chmod 777 /docker/chat
+RUN mkdir -p /docker/chat
 
 EXPOSE 80
 
