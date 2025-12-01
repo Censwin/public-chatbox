@@ -38,8 +38,7 @@ async function send() {
   textEl.value = "";
   textEl.focus();
 
-  // 提醒用户手动刷新
-  alert("消息已发送！如需查看最新消息请刷新页面。");
+  loadMessages();
 }
 
 sendBtn.onclick = send;
