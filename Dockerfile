@@ -1,15 +1,14 @@
-FROM python:3.11-slim
+FROM node:18-alpine
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY package.json ./
+RUN npm install --production
 
-COPY app.py .
+COPY server.js ./
 COPY public ./public
 
-RUN mkdir -p /docker/chat
-
 EXPOSE 80
+ENV PORT=80
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["node", "server.js"]

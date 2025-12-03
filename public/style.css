@@ -1,10 +1,16 @@
-body {
+/* 基础样式和重置 */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   background: #f5f5f5;
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .container {
@@ -15,65 +21,313 @@ body {
   display: flex;
   flex-direction: column;
   background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* 头部样式 */
 header {
-  padding: 10px;
+  padding: 15px 20px;
   background: #ffffff;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e0e0e0;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nick-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
 }
 
 #nick {
-  flex: 0 0 150px;
-  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #333;
   font-size: 14px;
+  width: 150px;
+  padding: 0;
 }
 
-#messages {
+#nick:focus {
+  outline: none;
+}
+
+/* 主内容区域 */
+main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messages-list {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
+  padding: 20px;
   background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.welcome-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.welcome-message h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.welcome-message p {
+  font-size: 1rem;
 }
 
 .msg {
-  margin-bottom: 14px;
+  background: white;
+  border-radius: 10px;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  max-width: 85%;
   word-wrap: break-word;
 }
 
-.meta {
-  font-size: 12px;
-  color: #888;
-  margin-bottom: 4px;
+.msg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-footer {
-  padding: 10px;
-  border-top: 1px solid #ddd;
+.msg.own-message {
+  background: #e3f2fd;
+  border-color: #bbdefb;
+  align-self: flex-end;
+}
+
+.msg .meta {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.msg .nickname {
+  font-weight: 600;
+  color: #333;
+}
+
+.msg .time {
+  color: #888;
+  font-size: 0.75rem;
+}
+
+.msg .content {
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.msg .actions {
+  display: flex;
+  justify-content: flex-end;
   gap: 8px;
-  background: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.msg:hover .actions {
+  opacity: 1;
+}
+
+.copy-btn {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #666;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.copy-btn.copied {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+/* 底部输入区域 */
+footer {
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 #text {
-  flex: 1;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+  color: #333;
+  font-size: 16px;
+  font-family: inherit;
+  resize: none;
+  min-height: 56px;
+  max-height: 150px;
+  transition: border-color 0.2s;
 }
 
-#send {
-  padding: 10px 16px;
-  background: #0b87ff;
-  border: none;
-  border-radius: 6px;
+#text:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.input-hint {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #888;
+  text-align: center;
+  display: none; /* 默认隐藏，在PC端显示 */
+}
+
+/* Toast 提示 */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(0, 0, 0, 0.8);
   color: white;
-  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  z-index: 1000;
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
-#send:active {
-  background: #066cd1;
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    height: 100vh;
+    max-width: 100%;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .logo h1 {
+    font-size: 1.3rem;
+  }
+  
+  .user-info {
+    justify-content: space-between;
+  }
+  
+  #nick {
+    width: 100%;
+  }
+  
+  .msg {
+    max-width: 95%;
+  }
+  
+  /* 移动端隐藏提示 */
+  .input-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  header, footer, main {
+    padding: 12px;
+  }
+  
+  .messages-list {
+    padding: 12px;
+  }
+  
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+  
+  .msg .meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* PC端显示提示 */
+@media (min-width: 769px) {
+  .input-hint {
+    display: block;
+  }
 }
