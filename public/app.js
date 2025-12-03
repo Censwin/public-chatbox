@@ -53,24 +53,28 @@ function append(msg) {
     minute: "2-digit",
   });
 
+  // 生成消息HTML
   msgDiv.innerHTML = `
     <div class="meta">
       <span class="nickname">${escapeHtml(msg.nick)}</span>
-      <span class="time">${timeStr}</span>
+      <div class="meta-right">
+        <span class="time">${timeStr}</span>
+        <a class="copy-link" href="javascript:void(0)" data-text="${escapeHtml(
+          msg.text
+        )}" title="复制消息">
+          复制
+        </a>
+      </div>
     </div>
     <div class="content">${formatMessage(msg.text)}</div>
-    <div class="actions">
-      <button class="copy-btn" data-text="${escapeHtml(msg.text)}">
-        复制
-      </button>
-    </div>
   `;
 
   messagesEl.appendChild(msgDiv);
 
   // 添加复制功能
-  const copyBtn = msgDiv.querySelector(".copy-btn");
-  copyBtn.addEventListener("click", function () {
+  const copyLink = msgDiv.querySelector(".copy-link");
+  copyLink.addEventListener("click", function (e) {
+    e.preventDefault();
     const textToCopy = this.getAttribute("data-text");
     copyToClipboard(textToCopy, this);
   });
@@ -111,28 +115,26 @@ textEl.onkeydown = (e) => {
 };
 
 // 复制到剪贴板
-function copyToClipboard(text, button) {
-  const originalText = button.innerHTML;
-
+function copyToClipboard(text, link) {
   // 使用现代 Clipboard API
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        showCopySuccess(button);
+        showCopySuccess(link);
       })
       .catch((err) => {
         console.error("复制失败:", err);
-        fallbackCopyTextToClipboard(text, button);
+        fallbackCopyTextToClipboard(text, link);
       });
   } else {
     // 降级方案
-    fallbackCopyTextToClipboard(text, button);
+    fallbackCopyTextToClipboard(text, link);
   }
 }
 
 // 降级复制方案
-function fallbackCopyTextToClipboard(text, button) {
+function fallbackCopyTextToClipboard(text, link) {
   const textArea = document.createElement("textarea");
   textArea.value = text;
 
@@ -149,7 +151,7 @@ function fallbackCopyTextToClipboard(text, button) {
   try {
     const successful = document.execCommand("copy");
     if (successful) {
-      showCopySuccess(button);
+      showCopySuccess(link);
     } else {
       console.error("复制命令执行失败");
     }
@@ -161,17 +163,18 @@ function fallbackCopyTextToClipboard(text, button) {
 }
 
 // 显示复制成功状态
-function showCopySuccess(button) {
-  button.innerHTML = "已复制";
-  button.classList.add("copied");
+function showCopySuccess(link) {
+  const originalText = link.textContent;
+  link.textContent = "已复制";
+  link.classList.add("copied");
 
   // 显示全局 toast 提示
   showToast(copyToast, "已复制到剪贴板", 2000);
 
-  // 3秒后恢复按钮状态
+  // 3秒后恢复链接状态
   setTimeout(() => {
-    button.innerHTML = "复制";
-    button.classList.remove("copied");
+    link.textContent = originalText;
+    link.classList.remove("copied");
   }, 3000);
 }
 
