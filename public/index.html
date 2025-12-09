@@ -5,7 +5,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>局域网聊天室</title>
-  <!-- 仅引入外部 CSS 文件 -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -29,22 +28,18 @@
     <main>
       <div class="messages-container">
         <div id="messages" class="messages-list">
-          <!-- 消息将由JavaScript动态生成 -->
+          <!-- 消息由JS动态生成 -->
         </div>
       </div>
     </main>
 
-    <!-- 底部输入区域（新增发送按钮） -->
+    <!-- 底部输入区域（含发送按钮） -->
     <footer>
       <div class="input-wrapper">
-        <!-- 文本框容器 -->
         <div class="text-input-container">
           <textarea id="text" placeholder="输入消息，点击发送按钮发送" maxlength="2000" rows="1" enterkeyhint="send"></textarea>
-          <div class="input-hint">
-            <span>Shift+Enter 换行</span>
-          </div>
+          <div class="input-hint"><span>Shift+Enter 换行</span></div>
         </div>
-        <!-- 发送按钮 -->
         <button id="sendBtn" class="send-btn">发送</button>
       </div>
     </footer>

@@ -1,8 +1,9 @@
-/* 基础样式和重置 */
+/* 基础样式和重置（修复被动事件警告） */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  touch-action: manipulation; /* 解决被动事件监听警告 */
 }
 
 body {
@@ -103,6 +104,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  scroll-behavior: smooth; /* 优化滚动体验 */
 }
 
 /* 消息气泡 */
@@ -184,7 +186,7 @@ main {
   word-break: break-word;
 }
 
-/* 底部输入区域（核心修改：适配发送按钮） */
+/* 底部输入区域（核心：适配发送按钮） */
 footer {
   padding: 20px;
   border-top: 1px solid #e0e0e0;
@@ -197,9 +199,9 @@ footer {
 .input-wrapper {
   flex: 1;
   display: flex;
-  flex-direction: row; /* 改为横向排列（输入框+按钮） */
+  flex-direction: row; /* PC端横向排列 */
   gap: 12px; /* 输入框和按钮间距 */
-  align-items: flex-end; /* 底部对齐 */
+  align-items: center; /* PC端垂直居中（修复错位） */
   position: relative;
 }
 
@@ -240,7 +242,7 @@ footer {
   display: none;
 }
 
-/* 发送按钮样式（新增核心样式） */
+/* 发送按钮样式 */
 .send-btn {
   padding: 14px 24px;
   background-color: #007bff;
@@ -253,9 +255,14 @@ footer {
   height: 56px; /* 和输入框高度一致 */
   flex-shrink: 0; /* 不被压缩 */
   transition: all 0.2s;
+  opacity: 0.8; /* 初始禁用态透明度 */
 }
 
-.send-btn:hover {
+.send-btn:not(:disabled) {
+  opacity: 1; /* 启用时完全不透明 */
+}
+
+.send-btn:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
@@ -286,7 +293,7 @@ footer {
   opacity: 1;
 }
 
-/* 响应式设计（适配移动端发送按钮） */
+/* 响应式设计（适配移动端） */
 @media (max-width: 768px) {
   .container {
     height: 100vh;
@@ -314,9 +321,9 @@ footer {
     max-width: 95%;
   }
   
-  /* 移动端输入区域调整 */
+  /* 移动端输入区域改为纵向排列 */
   .input-wrapper {
-    flex-direction: column; /* 移动端改为纵向排列 */
+    flex-direction: column;
     align-items: stretch;
   }
   
