@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>局域网聊天室</title>
+  <!-- 仅引入外部 CSS 文件 -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -18,7 +19,7 @@
         </div>
         <div class="user-info">
           <div class="nick-input-wrapper">
-            <input id="nick" placeholder="请输入昵称" maxlength="32" value="用户">
+            <input id="nick" placeholder="请输入昵称" maxlength="32">
           </div>
         </div>
       </div>
@@ -33,13 +34,18 @@
       </div>
     </main>
 
-    <!-- 底部输入区域 -->
+    <!-- 底部输入区域（新增发送按钮） -->
     <footer>
       <div class="input-wrapper">
-        <textarea id="text" placeholder="输入消息，按回车发送" maxlength="2000" rows="1" enterkeyhint="send"></textarea>
-        <div class="input-hint">
-          <span>按 Enter 发送，Shift+Enter 换行</span>
+        <!-- 文本框容器 -->
+        <div class="text-input-container">
+          <textarea id="text" placeholder="输入消息，点击发送按钮发送" maxlength="2000" rows="1" enterkeyhint="send"></textarea>
+          <div class="input-hint">
+            <span>Shift+Enter 换行</span>
+          </div>
         </div>
+        <!-- 发送按钮 -->
+        <button id="sendBtn" class="send-btn">发送</button>
       </div>
     </footer>
 

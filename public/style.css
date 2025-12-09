@@ -184,7 +184,7 @@ main {
   word-break: break-word;
 }
 
-/* 底部输入区域 */
+/* 底部输入区域（核心修改：适配发送按钮） */
 footer {
   padding: 20px;
   border-top: 1px solid #e0e0e0;
@@ -197,8 +197,18 @@ footer {
 .input-wrapper {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* 改为横向排列（输入框+按钮） */
+  gap: 12px; /* 输入框和按钮间距 */
+  align-items: flex-end; /* 底部对齐 */
   position: relative;
+}
+
+/* 文本框容器 */
+.text-input-container {
+  flex: 1; /* 占满剩余宽度 */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 #text {
@@ -230,6 +240,31 @@ footer {
   display: none;
 }
 
+/* 发送按钮样式（新增核心样式） */
+.send-btn {
+  padding: 14px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  white-space: nowrap;
+  height: 56px; /* 和输入框高度一致 */
+  flex-shrink: 0; /* 不被压缩 */
+  transition: all 0.2s;
+}
+
+.send-btn:hover {
+  background-color: #0056b3;
+}
+
+.send-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
 /* Toast 提示 */
 .toast {
   position: fixed;
@@ -251,7 +286,7 @@ footer {
   opacity: 1;
 }
 
-/* 响应式设计 */
+/* 响应式设计（适配移动端发送按钮） */
 @media (max-width: 768px) {
   .container {
     height: 100vh;
@@ -277,6 +312,18 @@ footer {
   
   .msg {
     max-width: 95%;
+  }
+  
+  /* 移动端输入区域调整 */
+  .input-wrapper {
+    flex-direction: column; /* 移动端改为纵向排列 */
+    align-items: stretch;
+  }
+  
+  .send-btn {
+    height: 48px; /* 移动端按钮高度略小 */
+    width: 100%; /* 移动端按钮占满宽度 */
+    padding: 12px;
   }
   
   /* 移动端隐藏提示 */
@@ -316,6 +363,13 @@ footer {
   
   .msg .meta-right {
     align-self: flex-end;
+  }
+  
+  /* 移动端输入框调整 */
+  #text {
+    min-height: 48px;
+    padding: 12px;
+    font-size: 14px;
   }
 }
 
